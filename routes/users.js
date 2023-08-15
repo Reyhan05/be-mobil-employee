@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+
 router.get('/employee', exampleController.employee);
 router.post('/employee', exampleController.store);
 router.get('/employee/:id', exampleController.getbyid);
