@@ -30,7 +30,7 @@ mobilController.car = (req, res, next) => {
 };
 
 mobilController.store = (req, res, next) => {
-    if (req.body.merek_mobil == null || req.body.tipe_mobil == null || req.body.warna) {
+    if (req.body.merek_mobil == null || req.body.tipe_mobil == null || req.body.warna == null) {
         return res.status(400).send({
             status: false,
             data: 'Data tidak lengkap'
