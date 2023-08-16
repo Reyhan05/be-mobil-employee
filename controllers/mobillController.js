@@ -61,14 +61,38 @@ const createNewMobil = async (req, res) => {
 const updateMobil = async (req, res) => {
     try {
         // mendapatkan request param -> mendapatkan data book berdasarkan id
-        
-
+        const { id } = req.params
         // mendapatkan req bodynya
+        const { merekMobil, tipeMobil, warna} = req.body
+        const mobil = await Mobil.findByPk(id)
 
+        if(!mobil) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'data mobil with ${id} not found'
+            })
+        }
+
+        // untuk mendapatkan updatenya
+        mobil.merekMobil = merekMobil
+        mobil.tipeMobil = tipeMobil
+        mobil.warna = warna
+
+        // return response
+        res.json({
+            status: 'success',
+            data: {
+                id: mobil.id,
+                merekMobil: mobil.merekMobil,
+                tipeMobil: mobil.tipeMobil,
+                warna: mobil.warna
+
+            }
+        })
 
     }catch(error){
         console.log(error, '<<< error update mobil')
     }
 }
 
-module.exports = {findAllMobils, getMobilById, createNewMobil}
+module.exports = {findAllMobils, getMobilById, createNewMobil, updateMobil}

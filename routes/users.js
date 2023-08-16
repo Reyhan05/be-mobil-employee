@@ -12,19 +12,20 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/employee', exampleController.employee);
-router.post('/employee', exampleController.store);
 router.get('/employee/:id', exampleController.getbyid);
+router.post('/employee', exampleController.store);
 router.put('/employee/:id', exampleController.update);
 router.delete('/employee/:id', exampleController.delete);
 
 router.get('/car', mobilController.car);
-router.post('/car', mobilController.store);
 router.get('/car/:id', mobilController.getbyid);
+router.post('/car', mobilController.store);
 router.put('/car/:id', mobilController.update);
 router.delete('/car/:id', mobilController.delete);
 
 router.get('/cars', mobillController.findAllMobils);
 router.get('/cars/:id', mobillController.getMobilById);
 router.post('/cars', mobillController.createNewMobil);
+router.patch('/cars', mobillController.updateMobil);
 
 module.exports = router;
