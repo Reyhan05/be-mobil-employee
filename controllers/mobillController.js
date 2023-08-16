@@ -1,98 +1,143 @@
-const { Mobil } = require('../models')
+const mobillController = {}
 
-const findAllMobils = async (req, res) => {
+const { Mobil } = require('../models/Mobil')
+
+mobillController.findAllMobil = async (req, res) => {
     try {
-        // data untuk mengakses ke database
+        console.log('Mobil')
         const data = await Mobil.findAll()
 
-
         const result = {
-            status: 'oke',
+            status: true,
             data: data
         }
         res.json(result)
     } catch (error) {
-        console.log(error, "<<< find all mobil")
+        console.log(error, '<<<<Error findBarang Function')
+    }
+}
+mobillController.post = async (req, res) => {
+    try {
+        const {
+            merekMobil,
+            tipeMobil,
+            warna
+        } = req.body
+        const newMobil = await Mobil.create({
+            merekMobil: merekMobil,
+            tipeMobil: tipeMobil,
+            warna: warna,
+        })
+
+        res.status(200).json({
+            status: true,
+            data: {
+                id: newMobil.id,
+                merekMobil: newMobil.merekMobil,
+                tipeMobil: newMobil.tipeMobil,
+                warna: newMobil.warna,
+                createdAt: newMobil.createdAt,
+                updatedAt: newMobil.updatedAt
+            }
+        })
+
+    } catch (error) {
+        console.log(error, '<<<<Error in Post Function>>>>')
     }
 }
 
-// create mobil by id
-const getMobilById = async (req, res) => {
+mobillController.getById = async (req, res) => {
     try {
-        const { id } = req.params
-        
+        const {
+            id
+        } = req.params
+
         const data = await Mobil.findByPk(id)
-        if (data == null) {
+        if (data === null) {
             return res.status(404).json({
-                status: 'failed',
-                message: 'data mobil with ${id} not found'
+                status: false,
+                message: `Data Items with id ${id} is not found`
             })
         }
         res.json({
-            status: 'oke',
+            status: true,
             data: data
         })
     } catch (error) {
-        console.log(error, "<<< get mobil by id")
+        console.log(error, '<<<<Error in GetById>>>>')
     }
 }
 
-const createNewMobil = async (req, res) => {
+mobillController.update = async (req, res) => {
     try {
-        // mendapatkan request body
-        const { merekMobil, tipeMobil, warna} = req.body
-        
-        const newBook = await Mobil.create({merekMobil: merekMobil, tipeMobil: tipeMobil, warna: warna})
+        const {
+            id
+        } = req.params
 
-        res.status(201).json({
-            status: 'success',
+        const {
+            merekMobil,
+            tipeMobil,
+            warna,
+        } = req.body
+
+        const mobil = await Mobil.findByPk(id)
+
+        if (!mobil) {
+            return res.status(404).json({
+                status: false,
+                message: `data with id ${id} is not found`
+            })
+        }
+        mobil.merekMobil = merekMobil
+        mobil.tipeMobil = tipeMobil
+        mobil.warna = warna,
+        mobil.updatedAt = new Date()
+
+        mobil.save()
+
+        res.json({
+            status: true,
             data: {
-                merekMobil: newBook.merekMobil,
-                tipeMobil: newBook.tipeMobil,
-                warna: newBook.warna
+                id: mobil.id,
+                merekMobil: mobil.nama_barang,
+                tipeMobil: mobil.harga,
+                warna: mobil.kategori,
+                createdAt: mobil.createdAt,
+                updatedAt: mobil.updatedAt
             }
         })
 
-    } catch(error) {
-        console.log(error, '<<< error create new mobil')
+    } catch (error) {
+        console.log(error, 'Error when Update Function')
     }
 }
 
-const updateMobil = async (req, res) => {
+mobillController.delete = async (req, res) => {
     try {
-        // mendapatkan request param -> mendapatkan data book berdasarkan id
-        const { id } = req.params
-        // mendapatkan req bodynya
-        const { merekMobil, tipeMobil, warna} = req.body
+        const {
+            id
+        } = req.params
+
         const mobil = await Mobil.findByPk(id)
 
-        if(!mobil) {
+        if (!mobil) {
             return res.status(404).json({
-                status: 'failed',
-                message: 'data mobil with ${id} not found'
+                status: false,
+                message: `data with id ${id} is not found`
             })
         }
 
-        // untuk mendapatkan updatenya
-        mobil.merekMobil = merekMobil
-        mobil.tipeMobil = tipeMobil
-        mobil.warna = warna
+        mobil.destroy()
 
-        // return response
         res.json({
-            status: 'success',
-            data: {
-                id: mobil.id,
-                merekMobil: mobil.merekMobil,
-                tipeMobil: mobil.tipeMobil,
-                warna: mobil.warna
-
-            }
+            status: true,
+            message: `Success delete data with id ${id}`
         })
 
-    }catch(error){
-        console.log(error, '<<< error update mobil')
-    }
-}
 
-module.exports = {findAllMobils, getMobilById, createNewMobil, updateMobil}
+    } catch (error) {
+        console.log(error, 'Error in Delete Function')
+    }
+};
+
+module.exports = mobillController;

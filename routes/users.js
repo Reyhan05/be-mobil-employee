@@ -23,9 +23,10 @@ router.post('/car', mobilController.store);
 router.put('/car/:id', mobilController.update);
 router.delete('/car/:id', mobilController.delete);
 
-router.get('/cars', mobillController.findAllMobils);
-router.get('/cars/:id', mobillController.getMobilById);
-router.post('/cars', mobillController.createNewMobil);
-router.patch('/cars', mobillController.updateMobil);
+router.get('/cars', mobillController.findAllMobil)
+router.post('/cars', mobillController.post)
+router.get('/cars/:id', mobillController.getById)
+router.put('/cars/:id', mobillController.update)
+router.delete('/cars/:id', mobillController.delete)
 
 module.exports = router;
