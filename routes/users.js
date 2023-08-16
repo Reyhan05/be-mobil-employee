@@ -3,6 +3,7 @@ var router = express.Router();
 
 const exampleController = require('../controllers/exampleController');
 const mobilController = require('../controllers/mobilController');
+const mobillController = require('../controllers/mobillController');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -21,5 +22,9 @@ router.post('/car', mobilController.store);
 router.get('/car/:id', mobilController.getbyid);
 router.put('/car/:id', mobilController.update);
 router.delete('/car/:id', mobilController.delete);
+
+router.get('/cars', mobillController.findAllMobils);
+router.get('/cars/:id', mobillController.getMobilById);
+router.post('/cars', mobillController.createNewMobil);
 
 module.exports = router;
